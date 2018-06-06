@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,11 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.ingredients_tv) TextView ingredients_tv;
     @BindView(R.id.description_tv) TextView description_tv;
     @BindView(R.id.toolbar_image) ImageView toolbar_iv;
+
+    @BindView(R.id.textView) TextView label_origin;
+    @BindView(R.id.textView2) TextView label_description;
+    @BindView(R.id.textView3) TextView label_ingredients;
+    @BindView(R.id.textView4) TextView label_alsoknownas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +85,38 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI(Sandwich sandwich) {
-        description_tv.setText(sandwich.getDescription());
-        origin_tv.setText(sandwich.getPlaceOfOrigin());
-        ingredients_tv.setText(TextUtils.join("\n",sandwich.getIngredients()));
-        also_known_tv.setText(TextUtils.join("\n", sandwich.getAlsoKnownAs()));
-        Picasso.with(this)
-                 .load(sandwich.getImage())
-                 .into(toolbar_iv);
+        if (!sandwich.getDescription().isEmpty()) {
+            description_tv.setText(sandwich.getDescription());
+        }else {
+            label_description.setVisibility(View.GONE);
+            description_tv.setVisibility(View.GONE);
+        }
+
+        if (!sandwich.getPlaceOfOrigin().isEmpty()){
+            origin_tv.setText(sandwich.getPlaceOfOrigin());
+        }else {
+            label_origin.setVisibility(View.GONE);
+            origin_tv.setVisibility(View.GONE);
+        }
+
+        if (sandwich.getIngredients().size()!=0){
+            ingredients_tv.setText(TextUtils.join("\n",sandwich.getIngredients()));
+        }else {
+            ingredients_tv.setVisibility(View.GONE);
+            label_ingredients.setVisibility(View.GONE);
+        }
+
+        if (sandwich.getAlsoKnownAs().size()!=0) {
+            also_known_tv.setText(TextUtils.join("\n", sandwich.getAlsoKnownAs()));
+        }else {
+            also_known_tv.setVisibility(View.GONE);
+            label_alsoknownas.setVisibility(View.GONE);
+        }
+
+
+        Picasso.get().load(sandwich.getImage())
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .into(toolbar_iv);
     }
 }

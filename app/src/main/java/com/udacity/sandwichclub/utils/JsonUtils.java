@@ -17,23 +17,23 @@ public class JsonUtils {
     public static Sandwich parseSandwichJson(String json) throws JSONException {
         JSONObject mainJson = new JSONObject(json);
 
-        JSONObject name = mainJson.getJSONObject("name");
-        String mainName = name.getString("mainName");
-        JSONArray alsoKnownAsArray =  name.getJSONArray("alsoKnownAs");
+        JSONObject name = mainJson.optJSONObject("name");
+        String mainName = name.optString("mainName");
+        JSONArray alsoKnownAsArray =  name.optJSONArray("alsoKnownAs");
         List<String> alsoKnownAs = new ArrayList<>();
         for (int i=0;i<alsoKnownAsArray.length();i++){
-            alsoKnownAs.add(alsoKnownAsArray.getString(i));
+            alsoKnownAs.add(alsoKnownAsArray.optString(i));
         }
 
-        String placeOfOrigin = mainJson.getString("placeOfOrigin");
-        String description = mainJson.getString("description");
-        String image = mainJson.getString("image");
+        String placeOfOrigin = mainJson.optString("placeOfOrigin");
+        String description = mainJson.optString("description");
+        String image = mainJson.optString("image");
 
-        JSONArray ingredArray = mainJson.getJSONArray("ingredients");
+        JSONArray ingredArray = mainJson.optJSONArray("ingredients");
         List<String> ingredients = new ArrayList<>();
 
         for (int i=0; i<ingredArray.length();i++){
-            ingredients.add(ingredArray.getString(i));
+            ingredients.add(ingredArray.optString(i));
         }
         Log.e("Json", "parseSandwichJson: "+ mainName );
         return new Sandwich(mainName,alsoKnownAs,placeOfOrigin,description,image,ingredients);
